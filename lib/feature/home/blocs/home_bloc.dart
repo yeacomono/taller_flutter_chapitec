@@ -16,6 +16,8 @@ class HomeBLoc {
 
   Future<void> callApiListCharacters() async {
     try {
+      _listCharacterController.sink.add(StreamsResponse.statuLoading());
+
       final request = await apiClient.get('/character');
       if (request?.statusCode != 200) {
         _listCharacterController.sink.add(StreamsResponse.statusError());
@@ -32,6 +34,12 @@ class HomeBLoc {
     } catch (e) {
       _listCharacterController.sink.add(StreamsResponse.statusError());
     }
+  }
+
+  Future<void> removeItems(int id) async {
+    _listCharacterController.sink.add(StreamsResponse.statuLoading());
+    listCharacters.removeWhere((v)=> v.id == id);
+    _listCharacterController.sink.add(StreamsResponse.statusCorrect(data: listCharacters));
   }
 }
 
